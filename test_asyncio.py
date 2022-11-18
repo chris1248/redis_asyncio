@@ -33,7 +33,7 @@ class Testit(IsolatedAsyncioTestCase):
         print(f"\tloop is running: {Testit.curr_loop.is_running()}")
         print(f"\tloop is closed: {Testit.curr_loop.is_closed()}")
         async with self.client.pipeline(transaction=False) as pipeline:
-            pipeline.set("haydon","Haydon Johnson")
+            pipeline.set("Luke","Luke Skywalker")
             pipeline.keys("*")
             result = await pipeline.execute()
             names = result[1:][0]
@@ -44,7 +44,7 @@ class Testit(IsolatedAsyncioTestCase):
     async def test_response_two(self):
         print("TEST_TWO")
         async with self.client.pipeline(transaction=False) as pipeline:
-            pipeline.set("hannah","Hannah Johnson")
+            pipeline.set("Princess","Princess Leia")
             pipeline.keys("*")
             result = await pipeline.execute()
             names = result[1:][0]
@@ -59,7 +59,7 @@ class Testit(IsolatedAsyncioTestCase):
         print(f"\tloop is running: {Testit.curr_loop.is_running()}")
         print(f"\tloop is closed: {Testit.curr_loop.is_closed()}")
         async with self.client.pipeline(transaction=False) as pipeline:
-            pipeline.set("gideon","Gideon Johnson")
+            pipeline.set("R2","R2D2 droid unit")
             pipeline.keys("*")
             result = await pipeline.execute()
             names = result[1:][0]
