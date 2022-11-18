@@ -5,6 +5,7 @@ This code for this git repo boils down the code to it's most basic parts.
 # Prerequisites
 1. This assumes you have python 3.9 installed on your machine. If you don't then simply edit setup_venv.sh and give it a different python version.
 2. This assumes you have the virtualenv package installed (via brew).
+3. This assumes you have the redis cli installed. So you can run `redis-server` for instance.
 
 # How to build
 1. Open a terminal window
@@ -12,8 +13,9 @@ This code for this git repo boils down the code to it's most basic parts.
 3. Run the command `source venv/bin/activate`
 
 # How to run all the tests
-1. First build the code (see steps above)
-2. Run the command `make unit-tests`
+1. Run the command `redis-server`
+2. First build the code (see steps above)
+3. Run the command `make unit-tests`
 
 # Problem with tests:
 When running all the tests at one time using pytest, some will fail with errors that look like this:
