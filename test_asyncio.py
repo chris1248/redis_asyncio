@@ -4,9 +4,12 @@ import asyncio
 import redis as syncredis
 import redis.asyncio
 
+def _print_loop_info():
+    curr_loop = asyncio.get_running_loop()
+    print(f"\tLoop: {id(curr_loop)}, running: {curr_loop.is_running()}, closed: {curr_loop.is_closed()}")
+    return curr_loop
 
 class Testit(IsolatedAsyncioTestCase):
-
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -22,16 +25,11 @@ class Testit(IsolatedAsyncioTestCase):
     async def asyncSetUp(self):
         print("asyncSetUp")
         self.client = redis.asyncio.Redis(host="127.0.0.1", port=6379)
-        Testit.curr_loop = asyncio.get_running_loop()
-        print(f"\tLoop: {id(Testit.curr_loop)}")
-        print(f"\tloop is running: {Testit.curr_loop.is_running()}")
-        print(f"\tloop is closed: {Testit.curr_loop.is_closed()}")
+        _print_loop_info()
 
     async def test_response_one(self):
         print("TEST_ONE")
-        print(f"\tLoop: {id(Testit.curr_loop)}")
-        print(f"\tloop is running: {Testit.curr_loop.is_running()}")
-        print(f"\tloop is closed: {Testit.curr_loop.is_closed()}")
+        _print_loop_info()
         async with self.client.pipeline(transaction=False) as pipeline:
             pipeline.set("Luke","Luke Skywalker")
             pipeline.keys("*")
@@ -43,6 +41,7 @@ class Testit(IsolatedAsyncioTestCase):
 
     async def test_response_two(self):
         print("TEST_TWO")
+        _print_loop_info()
         async with self.client.pipeline(transaction=False) as pipeline:
             pipeline.set("Princess","Princess Leia")
             pipeline.keys("*")
@@ -51,13 +50,10 @@ class Testit(IsolatedAsyncioTestCase):
             for r in names:
                 if type(r) is not bool:
                     print(f"\tname: {r.decode()}") 
-        print(f"\tloop is running: {Testit.curr_loop.is_running()}")
 
     async def test_response_three(self):
         print("TEST_THREE")
-        print(f"\tLoop: {id(Testit.curr_loop)}")
-        print(f"\tloop is running: {Testit.curr_loop.is_running()}")
-        print(f"\tloop is closed: {Testit.curr_loop.is_closed()}")
+        _print_loop_info()
         async with self.client.pipeline(transaction=False) as pipeline:
             pipeline.set("R2","R2D2 droid unit")
             pipeline.keys("*")
@@ -66,27 +62,22 @@ class Testit(IsolatedAsyncioTestCase):
             for r in names:
                 if type(r) is not bool:
                     print(f"\tname: {r.decode()}")
-        print(f"\tloop is running: {Testit.curr_loop.is_running()}")
 
     def tearDown(self):
         print("tearDown")
-        print(f"\tloop is running: {Testit.curr_loop.is_running()}")
 
     async def asyncTearDown(self):
         print("asyncTearDown")
         await self.client.close()
-        print(f"\tLoop: {id(Testit.curr_loop)}")
-        print(f"\tloop is running: {Testit.curr_loop.is_running()}")
+        _print_loop_info()
 
     async def on_cleanup(self):
         print("cleanup")
-        print(f"\tLoop: {id(Testit.curr_loop)}")
-        print(f"\tloop is running: {Testit.curr_loop.is_running()}")
-        print(f"\tloop is closed: {Testit.curr_loop.is_closed()}")
+        _print_loop_info()
 
     @classmethod
     def tearDownClass(cls) -> None:
         print("\n---TearDownClass---")
-        print(f"\tloop is running: {cls.curr_loop.is_running()}")
         return super().tearDownClass()
+        _print_loop_info()
 
