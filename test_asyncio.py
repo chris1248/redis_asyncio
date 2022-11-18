@@ -21,6 +21,7 @@ class Testit(IsolatedAsyncioTestCase):
     def setUp(self):
         self.addAsyncCleanup(self.on_cleanup)
         print("\nsetUp")
+        # There is no access to the event loop here. So we cannot call async functions here.
 
     async def asyncSetUp(self):
         print("asyncSetUp")
@@ -65,6 +66,7 @@ class Testit(IsolatedAsyncioTestCase):
 
     def tearDown(self):
         print("tearDown")
+        # There is no access to the event loop here. So we cannot call async functions here.
 
     async def asyncTearDown(self):
         print("asyncTearDown")
